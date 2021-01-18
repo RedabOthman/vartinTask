@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>updateUserInfo</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	</script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" href="../public/stylesheets/style.css">
+
+</head>
+
+<body>
+
+	<div class="col-md-4 col-md-offset-4">
+		<div>
+			<p>Update user information
+			</p>
+		</div>
+
+		<%if (msg && msg.length> 0) {%>
+			<label class="alert">
+				<%= msg %>
+
+			</label>
+			<% }%>
+
+				<div class="form-group">
+					<form id="form4" method="post" action="/updateUserInfo">
+						<input type="email" name="email" placeholder="E-mail" required="" class="form-control"
+							value=<%=user.email %>>
+						<br />
+						<input type="text" name="userName" placeholder="User Name" required="" class="form-control"
+							value=<%=user.userName %>>
+						<br />
+						<input type="password" name="password" placeholder="Password" required="" class="form-control"
+							value=<%=user.password %>
+						><br />
+						<input type="submit" value="update" class="btn btn-success">
+					</form>
+				</div>
+
+				<div class="mssg bg-danger">
+					<span id="check"></span>
+				</div>
+				<div>
+					<span>back <a href="/profile">Profile</a></span>
+				</div>
+				<div id="LangTable"><a href="/login" id="aa"></a>
+				</div>
+	</div>
+</body>
+
+</html>

@@ -1,0 +1,24 @@
+{
+  "name": "vatrintask",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www"
+  },
+  "dependencies": {
+    "bcrypt": "^5.0.0",
+    "body-parser": "^1.19.0",
+    "bootstrap": "^4.5.3",
+    "cookie-parser": "^1.4.5",
+    "debug": "~2.6.9",
+    "ejs": "~2.6.1",
+    "express": "~4.16.1",
+    "express-session": "^1.17.1",
+    "http-errors": "~1.6.3",
+    "knex": "^0.21.15",
+    "morgan": "~1.9.1",
+    "mysql": "^2.18.1",
+    "npx": "^10.2.2",
+    "objection": "^2.2.7"
+  }
+}
