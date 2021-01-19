@@ -5,7 +5,6 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var bodyParser = require('body-parser')
 var session = require('express-session');
-var User = require('./models/Users')
 
 var { getUserByID } = require("./models/api");
 var { login } = require('./models/api');
@@ -20,9 +19,9 @@ var app = express();
 
 var checkUser = async function (req, res, next) {
   if (req.session.isLoggedIn && req.session.userid) {
-   await getUserByID(res, req.session.userid, "profile");
+    await getUserByID(res, req.session.userid, "profile");
   } else {
-    res.render("login", { msg: null });
+    res.render("login", { msg: null, loginData: {} });
   }
 }
 
@@ -55,7 +54,7 @@ app.get("/", function (req, res) {
 });
 
 app.get('/signup', (req, res) => {
-  res.render('signup.ejs', { msg: null });
+  res.render('signup.ejs', { msg: null, newUser: {} });
 });
 app.post("/signup", async (req, res) => {
   let user = {
@@ -67,30 +66,24 @@ app.post("/signup", async (req, res) => {
 });
 
 app.get('/login', (req, res) => {
-  res.render('login', { msg: null });
+  res.render('login', { msg: null, loginData: {} });
 });
-
 app.post("/login", async (req, res) => {
   let user = { email: req.body.email, password: req.body.password }
   await login(user, res, req);
-
 });
 
 app.get('/profile', (req, res) => {
   return checkUser(req, res, indexRouter);
 });
 
-app.get('/updateUserInfo', async (req, res) => {
-  console.log('upadte info');
-  console.log(req.session);
-  console.log(req.session.userid);
-  await getUserByID(res, req.session.userid, "updateUserInfo");
-
- })
-
+//open edit user view
+app.post('/update', async (req, res) => {
+  await getUserByID(res, req.query.user_id, "updateUserInfo");
+});
 app.post("/updateUserInfo", async (req, res) => {
-  let user = {
-    id: req.session.userid,
+  var user = {
+    id: req.query.user_id,
     email: req.body.email,
     userName: req.body.userName,
     password: req.body.password
@@ -101,18 +94,15 @@ app.post("/updateUserInfo", async (req, res) => {
 app.post("/logout", async (req, res) => {
   req.session.isloggedin = false;
   req.session.userid = null;
-  res.render('login', { msg: null });
+  res.render('login', { msg: null, loginData: {} });
 });
 
 app.post("/deleteUser", async (req, res) => {
-  var id = req.session.userid;
-  console.log(req.session);
-   await deleteUser(id, res, req);
-})
+  await deleteUser(req.query.user_id, res, req);
+});
 
 app.use('/users', usersRouter);
 app.use("/css", express.static(__dirname + "./public/stylesheets/style.css"));
-
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));

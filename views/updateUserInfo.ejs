@@ -21,12 +21,10 @@
 		<%if (msg && msg.length> 0) {%>
 			<label class="alert">
 				<%= msg %>
-
 			</label>
 			<% }%>
-
 				<div class="form-group">
-					<form id="form4" method="post" action="/updateUserInfo">
+					<form id="form4" method="post" action="/updateUserInfo?user_id= <%=user.id %>" >
 						<input type="email" name="email" placeholder="E-mail" required="" class="form-control"
 							value=<%=user.email %>>
 						<br />

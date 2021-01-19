@@ -15,20 +15,17 @@
 			<p>Login</p>
 		</div>
 
-		<%if (msg && msg.length> 0)  {%>
+		<%if (msg && msg.length> 0) {%>
 			<label class="alert">
 				<%= msg %>
-				
 			</label>
 			<% }%>
-
-
-
 				<div class="form-group">
 					<form id="form" method="post" action="/login">
-						<input type="text" name="email" placeholder="E-mail" required="" class="form-control"><br />
-						<input type="password" name="password" placeholder="Password" required=""
-							class="form-control"><br />
+						<input type="text" name="email" placeholder="E-mail" required="" class="form-control"
+							value=<%=loginData.email %>><br />
+						<input type="password" name="password" placeholder="Password" required="" class="form-control"
+							value=<%=loginData.password %>><br />
 						<input type="submit" value="Login" class="btn btn-success">
 					</form>
 				</div>

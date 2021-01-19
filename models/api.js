@@ -10,9 +10,10 @@ User.login = async (user, res, req) => {
             .then(userData => {
                 var _user = userData[0];
                 if (userData.length == 0) {
-                    return res.render('login', { msg: "incorrect email or password" })
+                    return res.render('login', { msg: "incorrect email or password", loginData: user })
                 } else {
                     req.session.isloggedin = true;
+                    req.session.userid = _user.id;
                     return res.status(200).render('profile',
                         { user: _user });
                     // return res.status(200).send({ success: true, id: userData.id, msg: "Success!", status: 200 });
@@ -20,7 +21,7 @@ User.login = async (user, res, req) => {
             })
             .catch(err => {
                 console.log("Error is ", err.message);
-                return res.status(500).render('login', { msg: err.message });
+                return res.status(500).render('login', { msg: err.message, loginData: user });
             });
     } else {
         res.status(401).render('login', { msg: "incorrect email or password" })
@@ -32,9 +33,8 @@ User.getUserByID = async (res, id, next) => {
     await User.query()
         .where('id', id)
         .then(user => {
-
             if (user.length == 0) {
-                return res.render('login', { msg: "deleted account!", success: false });
+                return res.render('login', { msg: "deleted account!", success: false, loginData: {} });
             } else {
                 return res.status(200).render(next, { user: user[0], msg: null })
             }
@@ -59,19 +59,19 @@ User.create = async (newUser, res) => {
         async (user, error) => {
             //email is already used 
             if (user.length != 0) {
-                return res.status(409).render('signup', { msg: 'email is already used' })
+                return res.status(409).render('signup', { msg: 'email is already used', newUser })
             } else {
                 await User.query().insert({
                     userName: newUser.userName,
                     password: newUser.password,
                     email: newUser.email
                 });
-                return res.status(200).render('signup', { msg: 'You are now Registerd' })
+                return res.status(200).render('signup', { msg: 'You are now Registerd', newUser })
             }
         }
     ).catch(err => {
         console.log("Error is ", err.message);
-        return res.json({ err: err.message, status: 500 })
+        return res.status(500).render('signup', { msg: 'You are now Registerd', newUser });
     });
     return;
 }
@@ -88,30 +88,30 @@ User.getAll = async (req, res) => {
     return;
 }
 
-
 User.update = async (user, res) => {
-    await User.query()
-        .where('id', user.id)
-        .patch({
-            email: user.email,
-            userName: user.userName,
-            password: user.password,
-        }).then(() => {
-            return res.status(200).render('updateUserInfo', { user, msg: "data updated s!" });
-        })
-        .catch(err => {
-            console.log("Error is ", err.message);
-            return res.status(500).render('updateUserInfo', { user, msg: err.message });
-        });
-}
+
+                await User.query()
+                    .where('id', user.id)
+                    .patch({
+                        email: user.email,
+                        userName: user.userName,
+                        password: user.password,
+                    }).then(() => {
+                        return res.status(200).render('updateUserInfo', { user, msg: "data updated successfully!" });
+                    })
+                    .catch(err => {
+                        console.log("Error is ", err.message);
+                        return res.status(500).render('updateUserInfo', { user, msg: err.message });
+                    });
+            }
+        
+
 
 User.deleteUser = async function (id, res, req) {
-    console.log('id');
-    console.log(id);
     await User.query().deleteById(id).then(() => {
         req.session.isloggedin = false;
         req.session.userid = null;
-        return res.status(200).render('login', { msg: 'deleted successfully' })
+        return res.status(200).render('login', { msg: 'deleted successfully', loginData: {} })
             .catch(err => {
                 console.log("Error is ", err.message);
                 return res.statue(500).send({ success: false, err: err.message })

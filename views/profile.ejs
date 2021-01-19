@@ -9,7 +9,6 @@
 	<link rel="stylesheet" href="../public/stylesheets/style.css">
 </head>
 
-
 <body>
 	<div class="col-md-4 col-md-offset-4">
 		<div>
@@ -36,13 +35,12 @@
 		<form action="/logout" method="post">
 			<button type="submit" name="logout" value="logout" class="btn-link">logout</button>
 		</form>
-		<form action="/updateUserInfo" method="get">
+		<form action="/update?user_id= <%=user.id %>" method="post">
 			<button type="submit" name="update" value="update" class="btn-link">edit user</button>
 		</form>
-		<form action="/deleteUser" method="post">
+		<form action="/deleteUser?user_id= <%=user.id %>"" method="post">
 			<button type="submit" name="delete" value="delete" class="btn-link">delete user</button>
 		</form>
 	</div>
 </body>
-
 </html>
