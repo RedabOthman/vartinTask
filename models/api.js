@@ -12,7 +12,7 @@ User.login = async (user, res, req) => {
                 if (userData.length == 0) {
                     return res.render('login', { msg: "incorrect email or password", loginData: user })
                 } else {
-                    req.session.isloggedin = true;
+                    req.session.isloggedIn = true;
                     req.session.userid = _user.id;
                     return res.status(200).render('profile',
                         { user: _user });

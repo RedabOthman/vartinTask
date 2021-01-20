@@ -17,8 +17,8 @@ var usersRouter = require('./routes/users');
 
 var app = express();
 
-var checkUser = async function (req, res, next) {
-  if (req.session.isLoggedIn && req.session.userid) {
+var checkUser = async function (req, res) {
+  if (req.session.isloggedIn) {
     await getUserByID(res, req.session.userid, "profile");
   } else {
     res.render("login", { msg: null, loginData: {} });
@@ -43,14 +43,13 @@ app.use(
   session({
     secret: "app",
     name: "app",
-    resave: true,
-    saveUninitialized: false,
-    cookie: { maxAge: 6000 }
+    resave: false,
+    saveUninitialized: true,
   })
 );
 
 app.get("/", function (req, res) {
-  return checkUser(req, res, indexRouter);
+  return checkUser(req, res);
 });
 
 app.get('/signup', (req, res) => {
@@ -92,7 +91,7 @@ app.post("/updateUserInfo", async (req, res) => {
 });
 
 app.post("/logout", async (req, res) => {
-  req.session.isloggedin = false;
+  req.session.isloggedIn = false;
   req.session.userid = null;
   res.render('login', { msg: null, loginData: {} });
 });
